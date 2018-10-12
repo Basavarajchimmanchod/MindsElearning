@@ -1,23 +1,54 @@
 package com.sag.routes.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+
+@Table(name = "vehicledetails")
 public class VehicleDetail 
 {
-	private int id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int vdId;
+	@Column
 	private int Vehicle_no;
+	@Column
 	private int Vehicle_code;
+	@Column
 	private String No_of_Seat;
+	@Column
 	private String Maximum_capacity;
+	@Column
 	private int insurance;
+	@Column
 	private int tax_remitted;
+	@Column
 	private String permit;
+	@Column
 	private String status;
+	@Column
 	private String Vehicle_type_id;
-	private String campusId;
-	public int getId() {
-		return id;
+	@Column
+	private int campusId;
+	@Column
+	private String GpsNumber;
+	
+	public String getGpsNumber() {
+		return GpsNumber;
 	}
-	public void setId(int id) {
-		this.id = id;
+	public void setGpsNumber(String gpsNumber) {
+		GpsNumber = gpsNumber;
+	}
+	public int getVdId() {
+		return vdId;
+	}
+	public void setVdId(int vdId) {
+		this.vdId = vdId;
 	}
 	public int getVehicle_no() {
 		return Vehicle_no;
@@ -73,11 +104,12 @@ public class VehicleDetail
 	public void setVehicle_type_id(String vehicle_type_id) {
 		Vehicle_type_id = vehicle_type_id;
 	}
-	public String getCampusId() {
+	public int getCampusId() {
 		return campusId;
 	}
-	public void setCampusId(String campusId) {
+	public void setCampusId(int campusId) {
 		this.campusId = campusId;
 	}
+	
 	
 }

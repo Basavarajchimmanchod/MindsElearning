@@ -30,7 +30,7 @@ public class CourseController
 		
 		
 
-			final Logger logger = Logger.getLogger(RouteController.class);
+			final Logger logger = Logger.getLogger(CourseController.class);
 
 			@Autowired
 			private ServiceI serviceI;
@@ -80,4 +80,27 @@ public class CourseController
 				return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 			}
 			
+			
+			
+			
+			//Blackborad Course Details
+			
+			
+		/*	@GetMapping("/courseDetail/{courseId}")   //sample endpoint---- localhost:8080/rest/bus/route/{id}
+			public ResponseEntity<com.sag.routes.model.Coursetable> getCourseDetailsById(@PathVariable("courseId") Integer courseId) {
+				com.sag.routes.model.Coursetable course = serviceI.getCourseDetailsById(courseId);
+				return new ResponseEntity<com.sag.routes.model.Coursetable>(course, HttpStatus.OK);
+			}*/
+			
+			
+				/*@GetMapping("/courseDetail/{courseId}/assessment/{id}")   //sample endpoint---- localhost:8080/rest/bus/route/{id}
+			public ResponseEntity<com.sag.routes.model.Coursetable> getCourseAssessmentDetails(@PathVariable("courseId") Integer courseId) {
+				com.sag.routes.model.Coursetable course = serviceI.getCourseAssessmentDetails(courseId);
+				return new ResponseEntity<com.sag.routes.model.Coursetable>(course, HttpStatus.OK);
+			}
+				*/
+				
 		}
+
+
+

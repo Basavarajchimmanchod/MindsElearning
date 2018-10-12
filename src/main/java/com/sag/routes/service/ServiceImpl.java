@@ -9,27 +9,38 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sag.routes.controller.MedicalDetailsController;
 import com.sag.routes.dao.Dao;
 import com.sag.routes.model.AttendanceUser;
 import com.sag.routes.model.Books;
 import com.sag.routes.model.BusDetails;
 import com.sag.routes.model.CampusUser;
 import com.sag.routes.model.Class;
+import com.sag.routes.model.ClassTimeTable;
 import com.sag.routes.model.Course;
+import com.sag.routes.model.CourseAssessment;
+import com.sag.routes.model.CourseGrades;
+import com.sag.routes.model.Coursetable;
 import com.sag.routes.model.DriverUser;
 import com.sag.routes.model.Event;
+import com.sag.routes.model.ExamClassMapping;
+import com.sag.routes.model.ExamDetails;
 import com.sag.routes.model.GuardianUser;
+import com.sag.routes.model.HolidayList;
 import com.sag.routes.model.LibrarianUser;
+import com.sag.routes.model.Login;
 import com.sag.routes.model.Organization;
 import com.sag.routes.model.Route;
 import com.sag.routes.model.RouteDTO;
 import com.sag.routes.model.School;
+import com.sag.routes.model.SchoolNews;
 import com.sag.routes.model.Staff;
 import com.sag.routes.model.Student;
 import com.sag.routes.model.TrainDetailDTO;
 import com.sag.routes.model.TrainDetails;
 import com.sag.routes.model.UserContext;
 import com.sag.routes.model.VehicleDetail;
+import blackboard.data.course.CourseMembership;
 
 //Service Implementation for route and bus service with the Annotation @Service
 @Service
@@ -689,8 +700,213 @@ public class ServiceImpl implements ServiceI {
 		DriverUser driver=dao.getdriverdetailsByID(dId);
 		return driver;
 	}
+
+	@Override
+	public List<DriverUser> getdriverdetailsByCampusID(Integer campusId) {
+		List<DriverUser> driver=dao.getdriverdetailsByCampusID(campusId);
+		return driver;
+	}
+
+	@Override
+	public List<VehicleDetail> getVehicleListByCampusId(Integer campusId) {
+		// TODO Auto-generated method stub
+		List<VehicleDetail> vehicle=dao.getVehicleListByCampusId(campusId);
+		return vehicle;
+	}
+
+	@Override
+	public List<VehicleDetail> getVehicleListByCampusIdDriverId(Integer campusId, Integer driverId) {
+		// TODO Auto-generated method stub
+		List<VehicleDetail> vehicle=dao.getVehicleListByCampusIdDriverId(campusId,driverId);
+		return vehicle;
+	}
+
+	@Override
+	public ExamDetails getExamById(Integer EttId) {
+		// TODO Auto-generated method stub
+		ExamDetails exam=dao.getExamById(EttId);
+		return exam;
+	}
+
+	@Override
+	public List<ExamDetails> getExamDetails() {
+		// TODO Auto-generated method stub
+	List<ExamDetails> exams=dao.getExamDetails();
+	return exams;
+	}
+
+	@Override
+	public List<ExamClassMapping> getExamTimeTableByClassId(Integer classId) {
+		List<ExamClassMapping> examDetails=dao.getExamTimeTableByClassId(classId);
+		return examDetails;
+		
+	}
+
+	@Override
+	public List<ClassTimeTable> getClassTimeTableByClassId(Integer classId) {
+		// TODO Auto-generated method stub
+		List<ClassTimeTable> classDetails=dao.getClassTimeTableByClassId(classId);
+		return classDetails;
+	}
+
+	@Override
+	public void getSchoolNewsListBySchoolId(Integer id) {
+		// TODO Auto-generated method stub
+		SchoolNews schooln=dao.getSchoolNewsListBySchoolId(id);
+		
+	}
+
+	@Override
+	public void getSchoolListByCampusId(Integer id) {
+		// TODO Auto-generated method stub
+		School schoollist=dao.getSchoolListByCampusId(id);
+	}
+
+	@Override
+	public com.sag.routes.model.MedicalDetails getMedicalDetailsById(Integer mid) {
+		// TODO Auto-generated method stub
+		com.sag.routes.model.MedicalDetails medicaldetails=dao.getMedicalDetailsById(mid);
+		return medicaldetails;
+		
+	}
+
+	@Override
+	public List<com.sag.routes.model.MedicalDetails> getMedicalDetails() {
+		// TODO Auto-generated method stub
+	List<com.sag.routes.model.MedicalDetails> medicaldetails=dao.getMedicalDetails();
+	return medicaldetails;
 	
 	}
+
+	@Override
+	public boolean addMedicalDetails(com.sag.routes.model.MedicalDetails medical) {
+		// TODO Auto-generated method stub
+		if (dao.MedicalExists(medical.getMid(), medical.getMid())) {
+			return false;
+		} else {
+			dao.addMedical(medical);
+			return true;
+		}
+	}
+
+	@Override
+	public void updateMedical(com.sag.routes.model.MedicalDetails medical) {
+		// TODO Auto-generated method stub
+		dao.updateMedical(medical);
+	}
+
+	@Override
+	public void deleteMedical(Integer id) {
+		// TODO Auto-generated method stub
+		dao.deleteMedicalDetails(id);
+	}
+
+	@Override
+	public Student save(Student student) {
+		// TODO Auto-generated method stub
+		dao.addStudentDetails(student);
+		return student;
+	}
+
+	@Override
+	public List<HolidayList> getHolidayListByCampusId(Integer campusId) {
+		// TODO Auto-generated method stub
+		List<HolidayList> holidays=dao.getHolidayListByCampusId(campusId);
+		return holidays;
+	}
+
+	@Override
+	public HolidayList getHolidayListById(Integer hId) {
+		// TODO Auto-generated method stub
+		HolidayList holidays=dao.getHolidayListById(hId);
+		return holidays;
+	}
+
+	@Override
+	public Login getLoginById(Integer id) {
+		// TODO Auto-generated method stub
+		Login login= dao.getLoginDetailsById(id);
+				return login;
+	}
+
+	@Override
+	public List<Login> getAllLogins() {
+		// TODO Auto-generated method stub
+		List<com.sag.routes.model.Login> logindetails=dao.getLoginDetails();
+		return logindetails;
+	}
+
+	/*@Override
+	public List<Coursetable> getCourseDetailsById(Integer courseId) {
+		// TODO Auto-generated method stub
+		List<Coursetable> course = dao.getCourseDetailsById(courseId);
+		return course;
+	}*/
+
+	@Override
+	public List<CourseAssessment> getCourseAssessmentDetails(Integer courseId,Integer AssessmentId) {
+		// TODO Auto-generated method stub
+		List<CourseAssessment> courseAssesment = dao.getCourseAssessmentDetails(courseId,AssessmentId);
+		return courseAssesment;
+	}
+
+	@Override
+	public List<Coursetable> getAllCoursesList() {
+		// TODO Auto-generated method stub
+		List<com.sag.routes.model.Coursetable> coursedetails=dao.getAllCoursesList();
+		return coursedetails;
+	}
+
+	@Override
+	public List<Coursetable> getCourseDetailsById(Integer courseId) {
+		// TODO Auto-generated method stub
+		List<com.sag.routes.model.Coursetable> coursedetails=dao.getCourseDetailsById(courseId);
+		return coursedetails;
+	}
+
+	@Override
+	public List<CourseGrades> getCourseGradeDetails(Integer courseId) {
+		// TODO Auto-generated method stub
+		List< CourseGrades> courseAssesment = dao.getCourseGradeDetails(courseId);
+		return courseAssesment;
+	}
+
+	@Override
+	public List<CourseMembership> getCourseMembersDetails(Integer user_id) {
+		// TODO Auto-generated method stub
+		List<CourseMembership> courseMembers = dao.getCourseMembersDetails(user_id);
+		return courseMembers;
+	}
+
+	@Override
+	public boolean addCourse(Coursetable coursetab) {
+		// TODO Auto-generated method stub
+		if (dao.CoursedataExists(coursetab.getCourseId(), coursetab.getOrganization())) {
+			return false;
+		} 
+		else {
+			dao.addCourseDetail(coursetab);
+			return true;
+		}
+	}
+
+	@Override
+	public List<Coursetable> getCourseTermDetailsById(Integer termId) {
+		// TODO Auto-generated method stub
+		List<Coursetable> courseTerm = dao.getCourseTermDetailsById(termId);
+		return courseTerm;
+	}
+	
+	
+
+	/*@Override
+	public Coursetable getCourseAssessmentDetails(Integer courseId) {
+		// TODO Auto-generated method stub
+		List<Coursetable> course = dao.getCourseDetailsById(courseId);
+		return course;
+	}
+	*/
+}
 
 	
 		

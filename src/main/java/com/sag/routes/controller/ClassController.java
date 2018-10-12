@@ -88,7 +88,14 @@ public class ClassController
 			List<com.sag.routes.model.Class> list = serviceI.getAllClassesByCompusId(campus_id);
 			return new ResponseEntity<List<com.sag.routes.model.Class>>(list, HttpStatus.OK);
 		}
-		 
+		
+		//getClassTimeTableByClassId
+
+		@GetMapping("/classtimetable/{classId}")
+		public ResponseEntity<List<com.sag.routes.model.ClassTimeTable>> getClassTimeTableByClassId( @PathVariable("classId") Integer classId) {
+			List<com.sag.routes.model.ClassTimeTable> list = serviceI.getClassTimeTableByClassId(classId);
+			return new ResponseEntity<List<com.sag.routes.model.ClassTimeTable>>(list, HttpStatus.OK);
+		}
 		
 		
 	}

@@ -5,6 +5,8 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
@@ -24,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class Route {
 
 	@Id
-	//specifies this field is primary key
+    @GeneratedValue(strategy= GenerationType.AUTO)
 	@Column(name = "ROUTE_ID")
 	//specifies the column 
 	private Integer route_id;
@@ -86,8 +88,8 @@ public class Route {
 		return destination;
 	}
 
-	public void setDestination(String destination) {
-		this.destination = destination;
+	public String setDestination(String destination) {
+		return this.destination = destination;
 	}
 
 }

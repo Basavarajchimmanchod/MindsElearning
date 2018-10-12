@@ -87,53 +87,16 @@ public class SchoolController {
 		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 	}
 	
-	
-	/*@CrossOrigin
-	@GetMapping("/routenumbers") // eg:/routenumber?source=velachery&destination=madipakkam
-	public List<RouteDTO> getBusRoute(@RequestParam(value = "source", required = true) String source,
-			@RequestParam(value = "destination", required = false) String destination) {
-		List<RouteDTO> route = serviceI.getBusRoute(source, destination);
-		logger.info(source + destination);
-		return route;
-
-	}*/
-
-	/*// Bus Controller
-
-	@GetMapping("/busdetails/{id}")   //sample endpoint---- localhost:8080/rest/bus/busdetails/{id}
-	public ResponseEntity<BusDetails> getBusDetailsById(@PathVariable("id") Integer id) {
-		BusDetails busDetails = serviceI.getBusDetailsById(id);
-		return new ResponseEntity<BusDetails>(busDetails, HttpStatus.OK);
-	}
-	@CrossOrigin
-	@GetMapping("/busdetails")
-	public ResponseEntity<List<BusDetails>> getAllBusDetails() {
-		List<BusDetails> list = serviceI.getAllBusDetails();
-		return new ResponseEntity<List<BusDetails>>(list, HttpStatus.OK);
-	}
-
-	@PostMapping("/createbusdetails")
-	public ResponseEntity<Void> addBusDetails(@RequestBody BusDetails busDetails, UriComponentsBuilder builder) {
-		boolean flag = serviceI.addBusDetails(busDetails);
-		if (flag == false) {
-			return new ResponseEntity<Void>(HttpStatus.CONFLICT);
-		}
-		HttpHeaders headers = new HttpHeaders();
-		headers.setLocation(builder.path("/busdetails/{id}").buildAndExpand(busDetails.getBusDetails_id()).toUri());
-		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
-	}
-
-	@PutMapping("/update")
-	public ResponseEntity<BusDetails> updateBusDetails(@RequestBody BusDetails busDetails) {
-		serviceI.updateBusDetails(busDetails);
-		return new ResponseEntity<BusDetails>(busDetails, HttpStatus.OK);
-	}
-
-	@DeleteMapping("/deletebusdetails/{id}")
-	public ResponseEntity<Void> deleteBusDetails(@PathVariable("id") Integer id) {
-		serviceI.deleteBusDetails(id);
+	//getSchoolNewsListBySchoolId
+	public ResponseEntity<Void> getSchoolNewsListBySchoolId(@PathVariable("id") Integer id) {
+		serviceI.getSchoolNewsListBySchoolId(id);
 		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 	}
-	*/
+	
+	//getSchoolListByCampusId
+	public ResponseEntity<Void> getSchoolListByCampusId(@PathVariable("id") Integer id) {
+		serviceI.getSchoolListByCampusId(id);
+		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+	}
 	
 	}

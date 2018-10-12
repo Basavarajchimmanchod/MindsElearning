@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -59,6 +60,8 @@ public class RouteController {
 
 	@PostMapping("/route")
 	public ResponseEntity<Void> addRoute(@RequestBody Route route, UriComponentsBuilder builder) {
+	/*String DetsnationValue=route.setDestination(route.getDestination());
+		System.out.println("Destination Details"+DetsnationValue);*/
 		boolean flag = serviceI.addRoute(route);
 		if (flag == false) {
 			return new ResponseEntity<Void>(HttpStatus.CONFLICT);

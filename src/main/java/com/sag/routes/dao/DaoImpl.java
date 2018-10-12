@@ -1,40 +1,65 @@
 package com.sag.routes.dao;
 
-import java.util.List;
 
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.boot.Metadata;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
 import com.sag.routes.model.AttendanceUser;
 import com.sag.routes.model.Books;
 import com.sag.routes.model.BusDetails;
 import com.sag.routes.model.CampusUser;
 import com.sag.routes.model.Class;
+import com.sag.routes.model.ClassTimeTable;
 import com.sag.routes.model.Course;
+import com.sag.routes.model.CourseAssessment;
+import com.sag.routes.model.CourseGrades;
+import com.sag.routes.model.Coursetable;
 import com.sag.routes.model.DriverUser;
 import com.sag.routes.model.Event;
+import com.sag.routes.model.ExamClassMapping;
+import com.sag.routes.model.ExamDetails;
 import com.sag.routes.model.GuardianUser;
+import com.sag.routes.model.HolidayList;
 import com.sag.routes.model.LibrarianUser;
+import com.sag.routes.model.Login;
+import com.sag.routes.model.MedicalDetails;
 import com.sag.routes.model.Organization;
 import com.sag.routes.model.Route;
 import com.sag.routes.model.School;
+import com.sag.routes.model.SchoolNews;
 import com.sag.routes.model.Staff;
 import com.sag.routes.model.Student;
 import com.sag.routes.model.TrainDetails;
 import com.sag.routes.model.UserContext;
 import com.sag.routes.model.VehicleDetail;
 
+import blackboard.data.course.CourseMembership;
+
+
+
 
 @Transactional
 @Repository
 public class DaoImpl implements Dao {
+	
+	
+	@Autowired
+	 private static SessionFactory sessionFactory;
+	@Autowired
+	private static Session session;
+	 
+	private static StandardServiceRegistry registry;
+	  
 
 	/*Entity Manager is used to access a database 
 	* it is used to create and remove persistent entity instances
@@ -77,13 +102,13 @@ public class DaoImpl implements Dao {
 		entityManager.remove(entityManager.find(Route.class, routeId));
 	}
 
-	@Override
-	public boolean routeExists(String source, String destination) {
-		String hql = "FROM Route as rte WHERE rte.source = ? and rte.destination = ?";
-		int count = entityManager.createQuery(hql).setParameter(1, source).setParameter(2, destination).getResultList()
+	/*@Override
+	public boolean routeExists(String source, String destination,int route_id) {
+		String hql = "FROM Route as rte WHERE rte.source = ? and rte.destination = ? and rte.route_id=?";
+		int count = entityManager.createQuery(hql).setParameter(1, source).setParameter(2, destination).setParameter(3,route_id).getResultList()
 				.size();
 		return count > 0;
-	}
+	}*/
 
 	
 	
@@ -117,6 +142,20 @@ public class DaoImpl implements Dao {
 	@Override
 	public void addBusDetails(BusDetails busDetails) {
 		entityManager.persist(busDetails);
+		
+		/*StandardServiceRegistryBuilder registryBuilder = new StandardServiceRegistryBuilder();
+		registry= registryBuilder.build();
+		 // Create MetadataSources
+        MetadataSources sources = new MetadataSources(registry);
+        // Create Metadata
+        Metadata metadata = sources.getMetadataBuilder().build();
+     // Create SessionFactory
+        sessionFactory = metadata.getSessionFactoryBuilder().build();
+     // Create SessionFactory
+        Session session = sessionFactory.openSession();  
+        Transaction t = session.beginTransaction(); 
+        BusDetails busdetails=new BusDetails();*/
+        
 	}
 
 	@Override
@@ -227,18 +266,32 @@ public class DaoImpl implements Dao {
 			stud.setSdId(40);*/
 			System.out.println("Saving Employee to Database");
 			
-			entityManager.merge(student);
-			
-			System.out.println("Generated Employee ID = " + student.getSdId());
-			/*Student stud=entityManager.find(Student.class, student.getSdId());
-			stud.setBookId(student);*/
-			
-			/*Student stu = entityManager.merge(student);
-			stu.setSdId(student.getSdId());
-			stu.setUser_id(student.getUser_id());
-			stu.setStudentadminno(student.getUser_id());
-			stu.setVehicleId(stu.getVehicleId());*/
-			
+			//entityManager.merge(student);
+			StandardServiceRegistryBuilder registryBuilder = new StandardServiceRegistryBuilder();
+			registry= registryBuilder.build();
+			 // Create MetadataSources
+	        MetadataSources sources = new MetadataSources(registry);
+	        // Create Metadata
+	        Metadata metadata = sources.getMetadataBuilder().build();
+	     // Create SessionFactory
+	        sessionFactory = metadata.getSessionFactoryBuilder().build();
+	     // Create SessionFactory
+	        Session session = sessionFactory.openSession();  
+	        Transaction t = session.beginTransaction(); 
+	        student.setBookId(1);
+	        student.setCategoryId(2);
+	        student.setClassId(3);
+	        student.setCmId(4);
+	        student.setDocumentsSubmitted("yes");
+	        student.setEventId(1);
+	        student.setMotherTongueId(3);
+	        student.setNationalityId(1);
+	       student.setReligionId(3);
+			student.setSdId(20);
+			student.setStudentadminno(90);
+			student.setUser_id(21);
+			student.setVehicleId(3);
+session.persist(student);
 			entityManager.flush();
 		}
 			
@@ -250,6 +303,7 @@ public class DaoImpl implements Dao {
 			Student stu = entityManager.find(Student.class, student.getSdId());
 			stu.setSdId(student.getSdId());
 			stu.setUser_id(student.getUser_id());
+			stu.setReligionId(student.getReligionId());
 			entityManager.flush();
 		}
 		@Override
@@ -284,7 +338,15 @@ public class DaoImpl implements Dao {
 		@Override
 		public void addStaff(Staff staff) {
 			// TODO Auto-generated method stub
-			entityManager.persist(staff);
+		//entityManager.persist(staff);
+			session=sessionFactory.openSession();
+			session.save(staff);
+			entityManager.getTransaction().begin();
+			
+			/*entityManager.persist(staff);
+			entityManager.getTransaction().commit();*/
+			entityManager.close();
+			
 		}
 
 		@Override
@@ -747,12 +809,296 @@ public class DaoImpl implements Dao {
 			// TODO Auto-generated method stub
 			return entityManager.find(DriverUser.class, dId);
 		}
+
+		@Override
+		public List<DriverUser> getdriverdetailsByCampusID(Integer campusId) {
+			String hql="From Driver as driver where driver.campusId="+campusId;
+			return (List<DriverUser>)entityManager.createQuery(hql).getResultList();
+		}
+
+		@Override
+		public List<VehicleDetail> getVehicleListByCampusId(Integer campusId) {
+			String hql="From Vehicle as vehicle where vehicle.campusId="+campusId;
+			return (List<VehicleDetail>)entityManager.createQuery(hql).getResultList();
+		}
+
+		@Override
+		public List<VehicleDetail> getVehicleListByCampusIdDriverId(Integer campusId, Integer driverId) {
+			// TODO Auto-generated method stub
+			String hql="select veh.vdId,veh.Vehicle_no,veh.Vehicle_code,veh.No_Of_Seat,veh.Maximum_capacity,veh.insurance,veh.tax_remitted,veh.permit,veh.GpsNumber,veh.status,veh.Vehicle_type_id,veh.campusId FROM Vehcile as veh where veh.campusId = '"
+					+ campusId + "' and veh.dId =  '" + driverId+ "'";
+			return (List<VehicleDetail>)entityManager.createQuery(hql).getResultList();
+		}
+
+		@Override
+		public ExamDetails getExamById(Integer EttId) {
+			// TODO Auto-generated method stub
+			return entityManager.find(ExamDetails.class, EttId);
+		}
+
+		@Override
+		public List<ExamDetails> getExamDetails() {
+			// TODO Auto-generated method stub
+			String hql = "FROM ExamDetails as exam ORDER BY exam.EttId";
+			return (List<ExamDetails>) entityManager.createQuery(hql).getResultList();
+		}
+
+		@Override
+		public List<ExamClassMapping> getExamTimeTableByClassId(Integer classId) {
+			// TODO Auto-generated method stub
+			//String hql="select exms.ecmId,exms.examId,exms.classId,exms.sectionId,exms.termId,exms.createdAt,exms.updatedAt FROM ExamClassMapping as exms where exms.classId = '"
+				//	+ classId+ "'";
+			String hql="From ExamClassMapping as exams where exams.classId="+classId;
+			return (List<ExamClassMapping>) entityManager.createQuery(hql).getResultList();
+		}
+
+		@Override
+		public List<ClassTimeTable> getClassTimeTableByClassId(Integer classId) {
+			// TODO Auto-generated method stub
+			/*String hql="select classTime.TtId,classTime.classId,classTime.weekDayId,classTime.sectionId,classTime.subjectName,classTime.startTime,classTime.endTime FROM ClassTimeTable as classTime where classTime.classId = '"
+					+ classId+ "'";*/
+			String hql="From ClassTimeTable as classTime where classTime.classId="+classId;
+			return (List<ClassTimeTable>)entityManager.createQuery(hql).getResultList();
+		}
+
+		@Override
+		public SchoolNews getSchoolNewsListBySchoolId(Integer id) {
+			// TODO Auto-generated method stub
+			return entityManager.find(SchoolNews.class, id);
+		}
+
+		@Override
+		public School getSchoolListByCampusId(Integer id)
+		{
+			// TODO Auto-generated method stub
+			return entityManager.find(School.class, id);
 	
+		}
+
+		@Override
+		public com.sag.routes.model.MedicalDetails getMedicalDetailsById(Integer mid)
+		{
+			// TODO Auto-generated method stub
+			return entityManager.find(MedicalDetails.class, mid);
+			
+		}
+
+		@Override
+		public List<com.sag.routes.model.MedicalDetails> getMedicalDetails() {
+			// TODO Auto-generated method stub
+			String hql = "FROM Medical_Details as medical ORDER BY medical.mid";
+			return (List<MedicalDetails>) entityManager.createQuery(hql).getResultList();
+		}
+
+		@Override
+		public boolean MedicalExists(int id, int userid) {
+			// TODO Auto-generated method stub
+			String hql = "FROM MedicalDetails as medical WHERE medical.id ="+id;
+			int count = entityManager.createQuery(hql).setParameter(1, id).getResultList().size();
+			return count > 0 ;
+		}
+
+		@Override
+		public void addMedical(com.sag.routes.model.MedicalDetails medical) 
+		{
+			// TODO Auto-generated method stub
+			
+			entityManager.persist(medical);
+		}
+
+		@Override
+		public void updateMedical(com.sag.routes.model.MedicalDetails medical) {
+			// TODO Auto-generated method stub
+			com.sag.routes.model.MedicalDetails medicals = entityManager.find(com.sag.routes.model.MedicalDetails.class, medical.getMid());
+			medicals.setMid(medical.getMid());
+			medicals.setDoctorname(medical.getDoctorname());
+			entityManager.flush();
+		}
+
+		@Override
+		public void deleteMedicalDetails(Integer id) {
+			// TODO Auto-generated method stub
+			entityManager.remove(entityManager.find(com.sag.routes.model.MedicalDetails.class, id));
+		}
+
+		@Override
+		public void addStudentDetails(Student student) 
+		{
+			// TODO Auto-generated method stub
+System.out.println("Saving Employee to Database");
+			
+			//entityManager.merge(student);
+			StandardServiceRegistryBuilder registryBuilder = new StandardServiceRegistryBuilder();
+			registry= registryBuilder.build();
+			 // Create MetadataSources
+	        MetadataSources sources = new MetadataSources(registry);
+	        // Create Metadata
+	        Metadata metadata = sources.getMetadataBuilder().build();
+	     // Create SessionFactory
+	        sessionFactory = metadata.getSessionFactoryBuilder().build();
+	     // Create SessionFactory
+	        Session session = sessionFactory.openSession();  
+	        Transaction t = session.beginTransaction(); 
+	        student.setBookId(1);
+	        student.setCategoryId(2);
+	        student.setClassId(3);
+	        student.setCmId(4);
+	        student.setDocumentsSubmitted("yes");
+	        student.setEventId(1);
+	        student.setMotherTongueId(3);
+	        student.setNationalityId(1);
+	       student.setReligionId(3);
+			student.setSdId(20);
+			student.setStudentadminno(90);
+			student.setUser_id(21);
+			student.setVehicleId(3);
+			entityManager.flush();
+			
+		}
+
+		@Override
+		public List<HolidayList> getHolidayListByCampusId(Integer campusId) 
+		{
+			// TODO Auto-generated method stub
+			String hql="From HolidayList as holiday where holiday.campusId="+campusId;
+			return (List<HolidayList>)entityManager.createQuery(hql).getResultList();
+			
+		}
+
+		@Override
+		public HolidayList getHolidayListById(Integer hId) {
+			// TODO Auto-generated method stub
+			return entityManager.find(HolidayList.class, hId);
+		}
+
+		
+
+		@Override
+		public boolean routeExists(String source, String destination) 
+		{
+			System.out.println("source"+source);
+			String hql = "FROM Route as rte WHERE rte.source = ? and rte.destination =?";
+			int count = entityManager.createQuery(hql).setParameter(1, source).setParameter(2, destination).getResultList()
+					.size();
+			return count > 0;
+		}
+
+		@Override
+		public Login getLoginDetailsById(Integer id) 
+		{
+			// TODO Auto-generated method stub
+			return entityManager.find(Login.class, id);
+		}
+
+		@Override
+		public List<Login> getLoginDetails() 
+		{
+			// TODO Auto-generated method stub
+			String hql = "FROM Login as login ORDER BY login.id";
+			return (List<Login>) entityManager.createQuery(hql).getResultList();
+		}
+
+		@Override
+		public List<CourseAssessment> getCourseAssessmentDetails(Integer courseId,Integer AssessmentId) 
+		{
+			String hql="select courseAssmnt.courseId,courseAssmnt.assesmentId,courseAssmnt.title,courseAssmnt.points,courseAssmnt.intsructorNotes,courseAssmnt.type FROM courseassesment as courseAssmnt where courseAssmnt.courseId = '"
+					+ courseId + "'and courseAssmnt.assessmentId ='" + AssessmentId+ "'";
+			return (List<CourseAssessment>)entityManager.createQuery(hql).getResultList();
+			
+		}
+
+		/*@Override
+		public List<CourseMembership> getCourseMembersDetails(Integer courseId,Integer AssessmentId) 
+		{
+			String hql="select courseAssmnt.courseId,courseAssmnt.assesmentId,courseAssmnt.title,courseAssmnt.points,courseAssmnt.intsructorNotes,courseAssmnt.type FROM courseassesment as courseAssmnt where courseAssmnt.courseId = '"
+					+ courseId + "'and courseAssmnt.assessmentId ='" + AssessmentId+ "'";
+			return (List<CourseMembership>)entityManager.createQuery(hql).getResultList();
+			
+		}*/
+
+		
+		
+		@Override
+		public List<Coursetable> getAllCoursesList() {
+			// TODO Auto-generated method stub
+			String hql = "FROM Coursetable as course ORDER BY course.id";
+			return (List<Coursetable>) entityManager.createQuery(hql).getResultList();
+			
+		}
+		
+		
+
+		@Override
+		public List<CourseGrades>  getCourseGradeDetails(Integer courseId) {
+			// TODO Auto-generated method stub
+			/*System.out.println(courseId);
+			return entityManager.find(CourseGrades.class, courseId);*/
+			
+			
+			String hql="From CourseGrades as coursegrade where coursegrade.courseId="+courseId;
+			return (List<CourseGrades>)entityManager.createQuery(hql).getResultList();
+			
+		}
+
+		@Override
+		public List<Coursetable> getCourseDetailsById(Integer courseId) {
+			// TODO Auto-generated method stub
+			String hql="From CourseGrades as coursegrade where coursegrade.courseId="+courseId;
+			return (List<Coursetable>)entityManager.createQuery(hql).getResultList();
+		}
+
+		@Override
+		public List<CourseMembership> getCourseMembersDetails(Integer sdId) 
+		{
+			// TODO Auto-generated method stub
+			String hql="From CourseMembership as coursemember where coursemember.sdId="+sdId;
+			return (List<CourseMembership>)entityManager.createQuery(hql).getResultList();
+		}
+
+		
+		
+		
+		
+		@Override
+		public void addCourseDetail(Coursetable coursetab) {
+			// TODO Auto-generated method stub
+			entityManager.persist(coursetab);
+		}
+
+		@Override
+		public boolean CoursedataExists(int courseId, String name) {
+			// TODO Auto-generated method stub
+			//String hql = "FROM Coursetable as coursetab WHERE coursetab.courseId ="+courseId;
+			
+			String hql = "FROM Coursetable as coursetab WHERE coursetab.courseId = ?";
+			int count = entityManager.createQuery(hql).setParameter(1, courseId).getResultList().size();
+			return count > 0 ;
+		}
+
+		@Override
+		public List<Coursetable> getCourseTermDetailsById(Integer termId) {
+			// TODO Auto-generated method stub
+			
+			/*String hql="SELECT coursetable.courseId, coursetable.name, blackboardTerms.id" "FROM coursetable\n" + 
+					"INNER JOIN blackboardTerms\n" + 
+					"ON blackboardTerms.id=coursetable.termId;"*/
+					
+//String hql="select coursetable.courseId,coursetable.name,blackboardTerms.id FROM coursetable INNER JOIN blackboardTerms ON blackboardTerms.id"=+termId" and coursetable.termId"=+termId+"'";
+
+			
+		String hql=	"select coursetable.courseId,coursetable.name,blackboardTerms.id FROM coursetable INNER JOIN blackboardTerms ON blackboardTerms.id= '"
+					+ termId + "'and coursetable.termId ='" + termId+ "'";
+return (List<Coursetable>)entityManager.createQuery(hql).getResultList();
+			
+		}
+		
+		
 		
 		
 
 		
-
 		
-	
+		
+		
+		
 }

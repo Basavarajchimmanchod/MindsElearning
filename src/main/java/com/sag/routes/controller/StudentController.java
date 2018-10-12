@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -66,11 +68,12 @@ public class StudentController {
 	@CrossOrigin
 	@GetMapping("/students")
 	public ResponseEntity<List<Student>> getAllStudents() {
+		System.out.println("Get Students inside");
 		List<Student> list = serviceI.getAllStudents();
 		return new ResponseEntity<List<Student>>(list, HttpStatus.OK);
 	}
 
-	@PostMapping("/student")
+	/*@PostMapping("/student")
 	public ResponseEntity<Void> addStudent(@RequestBody Student student, UriComponentsBuilder builder) {
 		boolean flag = serviceI.addStudent(student);
 		if (flag == false) {
@@ -79,8 +82,18 @@ public class StudentController {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(builder.path("/student/{id}").buildAndExpand(student.getSdId()).toUri());
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
-	}
+	}*/
+	
+	
+	@RequestMapping(value = "/api/student", method = {RequestMethod.GET,RequestMethod.POST})
+public ResponseEntity<Student> createStudent(@RequestBody Student student){
 
+    Student studentSaved =serviceI.save(student);
+    return new ResponseEntity <Student> (studentSaved, HttpStatus.CREATED);
+    }
+
+	
+	
 	@PutMapping("/student")
 	public ResponseEntity<Student> updateStudent(@RequestBody Student student) {
 		serviceI.updateStudent(student);

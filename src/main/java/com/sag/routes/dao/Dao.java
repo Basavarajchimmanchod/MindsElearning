@@ -2,25 +2,37 @@ package com.sag.routes.dao;
 
 import java.util.List;
 
+import com.sag.routes.controller.MedicalDetailsController;
 import com.sag.routes.model.AttendanceUser;
 
 import com.sag.routes.model.Books;
 import com.sag.routes.model.BusDetails;
 import com.sag.routes.model.CampusUser;
 import com.sag.routes.model.Class;
+import com.sag.routes.model.ClassTimeTable;
 import com.sag.routes.model.Course;
+import com.sag.routes.model.CourseAssessment;
+import com.sag.routes.model.CourseGrades;
+import com.sag.routes.model.Coursetable;
 import com.sag.routes.model.DriverUser;
 import com.sag.routes.model.Event;
+import com.sag.routes.model.ExamClassMapping;
+import com.sag.routes.model.ExamDetails;
 import com.sag.routes.model.GuardianUser;
+import com.sag.routes.model.HolidayList;
 import com.sag.routes.model.LibrarianUser;
+import com.sag.routes.model.Login;
 import com.sag.routes.model.Organization;
 import com.sag.routes.model.Route;
 import com.sag.routes.model.School;
+import com.sag.routes.model.SchoolNews;
 import com.sag.routes.model.Staff;
 import com.sag.routes.model.Student;
 import com.sag.routes.model.TrainDetails;
 import com.sag.routes.model.UserContext;
 import com.sag.routes.model.VehicleDetail;
+
+import blackboard.data.course.CourseMembership;
 
 //CRUD Operations
 
@@ -45,7 +57,7 @@ public interface Dao {
 
 	// Check whether route ID exists or not to create a new route to avoid
 	// duplication
-	boolean routeExists(String source, String destination);
+	//boolean routeExists(String source, String destination);
 
 	// Bus DAO
 	// Get all available bus number
@@ -271,8 +283,71 @@ public interface Dao {
 		List<Student> getStudentWhoHasReturnBook(Integer campus_id);
 
 		DriverUser getdriverdetailsByID(Integer dId);
-	
 
+		List<DriverUser> getdriverdetailsByCampusID(Integer campusId);
+
+		List<VehicleDetail> getVehicleListByCampusId(Integer campusId);
+
+		List<VehicleDetail> getVehicleListByCampusIdDriverId(Integer campusId, Integer driverId);
+
+		ExamDetails getExamById(Integer EttId);
+
+		List<ExamDetails> getExamDetails();
+
+		List<ExamClassMapping> getExamTimeTableByClassId(Integer classId);
+
+		List<ClassTimeTable> getClassTimeTableByClassId(Integer classId);
+
+		SchoolNews getSchoolNewsListBySchoolId(Integer id);
+
+		School getSchoolListByCampusId(Integer id);
+
+		com.sag.routes.model.MedicalDetails getMedicalDetailsById(Integer mid);
+
+		List<com.sag.routes.model.MedicalDetails> getMedicalDetails();
+
+		boolean MedicalExists(int id, int id2);
+
+		void addMedical(com.sag.routes.model.MedicalDetails medical);
+
+		
+
+		void updateMedical(com.sag.routes.model.MedicalDetails medical);
+
+		void deleteMedicalDetails(Integer id);
+
+		void addStudentDetails(Student student);
+
+		List<HolidayList> getHolidayListByCampusId(Integer campusId);
+
+		HolidayList getHolidayListById(Integer hId);
+
+		
+
+		boolean routeExists(String source, String destination);
+
+		Login getLoginDetailsById(Integer id);
+
+		List<Login> getLoginDetails();
+
+		List<CourseAssessment> getCourseAssessmentDetails(Integer courseId,Integer AssessmentId);
+
+		List<Coursetable> getAllCoursesList();
+		
+		List<CourseGrades> getCourseGradeDetails(Integer courseId);
+
+		List<Coursetable> getCourseDetailsById(Integer courseId);
+
+		List<CourseMembership> getCourseMembersDetails(Integer user_id);
+
+		void addCourseDetail(Coursetable coursetab);
+		
+		boolean CoursedataExists(int id, String name);
+
+		List<Coursetable> getCourseTermDetailsById(Integer termId); 
+
+		//List<CourseMembership> getCourseMembersDetails(Integer courseId, Integer AssessmentId);
+		
 		
 
 		
